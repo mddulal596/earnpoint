@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earn Point - Withdraw</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>Withdraw Points</h1>
+<select id="payment-method">
+  <option value="bKash">bKash</option>
+  <option value="Nagad">Nagad</option>
+</select>
+<input type="number" id="points" placeholder="Points to withdraw">
+<button onclick="requestWithdraw(document.getElementById('points').value, document.getElementById('payment-method').value)">Request Withdraw</button>
+
+<script type="module" src="js/withdraw.js"></script>
+</body>
+</html>
