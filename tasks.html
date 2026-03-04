@@ -1,64 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tasks | EarnPoint</title>
-<style>
-  body { font-family:'Segoe UI',sans-serif; background:#f0f4ff; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
-  .container { background:#fff; padding:30px 40px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.1); width:100%; max-width:600px; }
-  h2 { color:#0000ff; margin-bottom:20px; text-align:center; }
-  ul { list-style:none; padding:0; }
-  li { background:#e8f0fe; margin:10px 0; padding:12px 15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; }
-  button { padding:6px 12px; border:none; border-radius:5px; background:#0000ff; color:#fff; cursor:pointer; transition:0.2s; }
-  button:hover { opacity:0.9; }
-</style>
+  <title>Tasks | EarnPoint</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<button id="menu-toggle">☰ Menu</button>
+
+<div id="sidebar">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="refer.html">Refer</a>
+  <a href="withdraw.html">Withdraw</a>
+  <a href="profile.html">Profile</a>
+  <a href="#" id="logoutBtn">Logout</a>
+</div>
+
 <div class="container">
-  <h2>Earning Tasks</h2>
-  <ul id="tasksList"></ul>
+  <h2>Tasks</h2>
+  <div class="task-card">
+    <span>Watch Video (30 sec) - Reward: 100 Points</span>
+    <button id="task1Btn">Start</button>
+  </div>
+  <div class="task-card">
+    <span>Sponsor Visit (20 sec) - Reward: 50 Points</span>
+    <button id="task2Btn">Start</button>
+  </div>
+  <div class="task-card">
+    <span>Daily Bonus (1x/day) - Reward: 200 Points</span>
+    <button id="dailyBonusBtn">Claim</button>
+  </div>
 </div>
 
 <script type="module">
-import { auth, db } from './firebase.js';
+import { auth, db } from './js/firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const tasks = [
-  {id: "task1", name: "Watch Video", points: 50},
-  {id: "task2", name: "Visit Website", points: 30},
-  {id: "task3", name: "Daily Check-in", points: 20},
-];
+const task1Btn = document.getElementById('task1Btn');
+const task2Btn = document.getElementById('task2Btn');
+const dailyBonusBtn = document.getElementById('dailyBonusBtn');
+const logoutBtn = document.getElementById('logoutBtn');
 
-let currentUserDoc = null;
+logoutBtn.onclick = () => auth.signOut();
 
 onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "login.html";
-    return;
+  if (!user) { window.location.href='login.html'; return; }
+  
+  const userRef = doc(db, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
+  if (!userSnap.exists()) return;
+
+  let userData = userSnap.data();
+
+  const checkDailyLimit = (reward) => {
+    const today = new Date().toDateString();
+    if (userData.lastEarnDate !== today) { userData.dailyEarn = 0; userData.lastEarnDate = today; }
+    if ((userData.dailyEarn + reward) > 500) {
+      alert('Daily limit reached!');
+      return false;
+    }
+    return true;
   }
 
-  currentUserDoc = doc(db, "users", user.uid);
+  const updatePoints = async (reward) => {
+    userData.points += reward;
+    userData.dailyEarn += reward;
+    await updateDoc(userRef, { points: userData.points, dailyEarn: userData.dailyEarn, lastEarnDate: userData.lastEarnDate });
+    alert(`You earned ${reward} Points! Current Points: ${userData.points}`);
+  }
 
-  const list = document.getElementById("tasksList");
-  tasks.forEach(task => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${task.name} (+${task.points} points)
-      <button>Complete</button>
-    `;
-    list.appendChild(li);
+  task1Btn.onclick = () => {
+    if (!checkDailyLimit(100)) return;
+    task1Btn.disabled = true;
+    task1Btn.innerText = 'Watching...';
+    setTimeout(async () => { task1Btn.disabled = false; task1Btn.innerText = 'Start'; await updatePoints(100); }, 30000);
+  }
 
-    li.querySelector("button").addEventListener("click", async () => {
-      const docSnap = await getDoc(currentUserDoc);
-      const data = docSnap.data();
-      const newBalance = data.balance + task.points;
-      await updateDoc(currentUserDoc, { balance: newBalance });
-      alert(`${task.points} points added! New Balance: ৳ ${newBalance}`);
-    });
-  });
+  task2Btn.onclick = () => {
+    if (!checkDailyLimit(50)) return;
+    task2Btn.disabled = true;
+    task2Btn.innerText = 'Visiting...';
+    setTimeout(async () => { task2Btn.disabled = false; task2Btn.innerText = 'Start'; await updatePoints(50); }, 20000);
+  }
+
+  dailyBonusBtn.onclick = async () => {
+    const today = new Date().toDateString();
+    if (userData.lastBonus === today) { alert('Daily bonus already claimed!'); return; }
+    if (!checkDailyLimit(200)) return;
+    userData.lastBonus = today;
+    await updatePoints(200);
+  }
+
 });
 </script>
+
 </body>
 </html>
