@@ -11,37 +11,23 @@
 <input type="password" id="password" placeholder="Password"><br><br>
 <button onclick="login()">Login</button>
 
-<p>No account? <a href="register.html">Register</a></p>
+<p>Don't have an account? <a href="register.html">Register</a></p>
 
 <script type="module">
+import { auth } from './firebase.js';
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } 
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCocTCNbmDj8b5fOrh5g7W_0YghJ8n9niE",
-  authDomain: "earnpoint-76792.firebaseapp.com",
-  projectId: "earnpoint-76792",
-  appId: "1:88961998597:web:1cf6237d002b5eedb9a16c"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.login = function () {
+window.login = async function() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      window.location.href = "dashboard.html";
-    })
-    .catch((error) => {
-      alert(error.code + "\n" + error.message);
-    });
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    alert(error.code + "\n" + error.message);
+  }
 };
-
 </script>
 
 </body>
