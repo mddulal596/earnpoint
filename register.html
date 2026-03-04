@@ -10,14 +10,43 @@
   <h2>Register</h2>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
-  <button onclick="register()">Sign Up</button>
+  <button id="registerBtn">Sign Up</button>
   <p>Already have an account? <a href="login.html">Login</a></p>
 </div>
 
-<script>
-  function register() {
-    alert('Registration clicked (firebase later)');
+<script type="module">
+import { auth, db } from './js/firebase.js';
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const registerBtn = document.getElementById('registerBtn');
+
+registerBtn.onclick = async () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Create user document in Firestore
+    await setDoc(doc(db, 'users', user.uid), {
+      email: user.email,
+      points: 0,
+      name: '',
+      totalRefer: 0,
+      referredBy: '',
+      dailyEarn: 0,
+      lastEarnDate: '',
+      status: 'active'
+    });
+
+    alert('Registration successful!');
+    window.location.href = 'dashboard.html';
+  } catch (error) {
+    alert(error.message);
   }
+};
 </script>
 
 </body>
