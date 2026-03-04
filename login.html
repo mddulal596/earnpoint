@@ -1,96 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login | EarnPoint</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f4ff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .card {
-      background: #fff;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-    h2 {
-      color: #0000ff;
-      margin-bottom: 20px;
-    }
-    input {
-      width: 100%;
-      padding: 12px 15px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #0000ff;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: 0.2s;
-    }
-    button:hover {
-      opacity: 0.9;
-    }
-    p {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-    a {
-      color: #0000ff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div class="card">
+<div class="login-container">
   <h2>Login</h2>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
   <button onclick="login()">Login</button>
-  <p>Don't have an account? <a href="register.html">Register</a></p>
+  <p>Don't have an account? <a href="register.html">Sign Up</a></p>
 </div>
 
-<script type="module">
-import { auth } from './firebase.js';
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-window.login = async function() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  if (!email || !password) {
-    alert("All fields are required!");
-    return;
+<script>
+  function login() {
+    alert('Login clicked (firebase later)');
   }
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "dashboard.html";
-  } catch (error) {
-    alert(error.code + "\n" + error.message);
-  }
-};
 </script>
 
 </body>
