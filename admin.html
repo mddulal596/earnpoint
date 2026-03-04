@@ -1,71 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel | EarnPoint</title>
-<style>
-  body { font-family:'Segoe UI',sans-serif; background:#f0f4ff; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
-  .container { background:#fff; padding:30px 40px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.1); width:100%; max-width:600px; }
-  h2 { color:#0000ff; margin-bottom:20px; text-align:center; }
-  table { width:100%; border-collapse:collapse; margin-top:20px; }
-  th, td { padding:10px; text-align:left; border-bottom:1px solid #ddd; }
-  button { padding:6px 12px; border:none; border-radius:5px; cursor:pointer; transition:0.2s; }
-  .approve { background:#28a745; color:#fff; }
-  .reject { background:#dc3545; color:#fff; }
-</style>
+  <title>Admin Panel | EarnPoint</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
 <div class="container">
-  <h2>Admin Panel - Withdraw Requests</h2>
-  <table>
-    <thead>
-      <tr><th>User</th><th>Amount</th><th>Action</th></tr>
-    </thead>
-    <tbody id="requestsTable"></tbody>
-  </table>
+  <h2>Admin Panel</h2>
+  <div id="pendingWithdraws"></div>
 </div>
 
 <script type="module">
-import { auth, db } from './firebase.js';
+import { auth, db } from './js/firebase.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 onAuthStateChanged(auth, async (user) => {
-  if (!user || user.email !== "mddulalhosen0@gmail.com") {
-    alert("Access denied");
-    window.location.href = "login.html";
-    return;
-  }
+  if (!user || user.email !== 'mddulalhosen0@gmail.com') { alert('Admin only'); window.location.href='login.html'; return; }
 
-  const requestsRef = collection(db, "withdrawRequests");
-  const snapshot = await getDocs(requestsRef);
-  const table = document.getElementById("requestsTable");
+  const withdrawsCol = collection(db, 'withdrawRequests');
+  const withdrawsSnap = await getDocs(withdrawsCol);
 
-  snapshot.forEach(docSnap => {
-    const data = docSnap.data();
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${data.userEmail}</td>
-      <td>৳ ${data.amount}</td>
-      <td>
-        <button class="approve">Approve</button>
-        <button class="reject">Reject</button>
-      </td>
+  const container = document.getElementById('pendingWithdraws');
+  withdrawsSnap.forEach(w => {
+    const data = w.data();
+    const div = document.createElement('div');
+    div.classList.add('task-card');
+    div.innerHTML = `
+      <span>${data.userId} | ${data.points} Points | ${data.method} | ${data.number} | Status: ${data.status}</span>
+      <button id="approve-${w.id}">Approve</button>
+      <button id="reject-${w.id}">Reject</button>
     `;
-    table.appendChild(row);
+    container.appendChild(div);
 
-    row.querySelector(".approve").addEventListener("click", async () => {
-      await updateDoc(doc(db, "withdrawRequests", docSnap.id), { status: "approved" });
-      row.style.backgroundColor = "#d4edda";
-    });
-
-    row.querySelector(".reject").addEventListener("click", async () => {
-      await updateDoc(doc(db, "withdrawRequests", docSnap.id), { status: "rejected" });
-      row.style.backgroundColor = "#f8d7da";
-    });
+    document.getElementById(`approve-${w.id}`).onclick = async () => {
+      await updateDoc(doc(db, 'withdrawRequests', w.id), { status: 'paid' });
+      alert('Withdraw approved');
+      div.remove();
+    }
+    document.getElementById(`reject-${w.id}`).onclick = async () => {
+      await updateDoc(doc(db, 'withdrawRequests', w.id), { status: 'rejected' });
+      alert('Withdraw rejected');
+      div.remove();
+    }
   });
 });
 </script>
+
 </body>
 </html>
