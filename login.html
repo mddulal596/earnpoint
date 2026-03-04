@@ -10,14 +10,25 @@
   <h2>Login</h2>
   <input type="email" id="email" placeholder="Email">
   <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Login</button>
+  <button id="loginBtn">Login</button>
   <p>Don't have an account? <a href="register.html">Sign Up</a></p>
 </div>
 
-<script>
-  function login() {
-    alert('Login clicked (firebase later)');
+<script type="module">
+import { auth } from './js/firebase.js';
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+document.getElementById('loginBtn').onclick = async () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = 'dashboard.html';
+  } catch (error) {
+    alert(error.message);
   }
+};
 </script>
 
 </body>
