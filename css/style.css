@@ -1,55 +1,117 @@
+/* =========================
+   Global Dark Theme
+========================= */
 body {
   font-family: Arial, sans-serif;
-  margin:0; padding:0;
-  background:#f1f1f1;
+  margin: 0;
+  padding: 0;
+  background: #121212;
+  color: #eee;
 }
-h1, h3, p { margin: 10px; }
-.login-container {
+
+h1,h2,h3,p {
+  margin: 10px 0;
+  color: #eee;
+  text-align: center;
+}
+
+/* =========================
+   Container / Card
+========================= */
+.container, .login-container, .card {
   max-width: 400px;
-  margin: 100px auto;
-  padding:20px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 0 10px rgba(0,0,0,0.2);
+  margin: 50px auto;
+  padding: 20px 30px;
+  background: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  text-align: center;
 }
+
+/* =========================
+   Buttons
+========================= */
 button {
-  padding:10px 20px;
-  background:#0000ff;
-  color:#fff;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
+  padding: 10px 20px;
+  background: #6200ee;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;
+  margin: 5px;
+  transition: 0.2s;
 }
 button:hover {opacity:0.8;}
+#logoutBtn {background:#bb0000;}
+#addPointsBtn {background:#6200ee;}
+
+/* =========================
+   Inputs
+========================= */
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #444;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #1e1e1e;
+  color: #eee;
+}
+
+/* =========================
+   Task Cards
+========================= */
 .task-card {
-  background:#fff;
-  padding:15px;
-  margin:10px;
-  border-radius:10px;
-  box-shadow:0 0 5px rgba(0,0,0,0.1);
+  background: #1e1e1e;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+/* =========================
+   Sidebar
+========================= */
 #sidebar {
-  position:fixed;
-  left:-250px;
-  top:0;
-  width:250px;
-  height:100%;
-  background:#111;
-  color:#fff;
-  transition:0.3s;
-  padding-top:50px;
+  position: fixed;
+  left: -250px; top:0;
+  width: 250px; height: 100%;
+  background: #111;
+  color: #fff;
+  transition: 0.3s;
+  padding-top: 50px;
+  z-index: 1000;
 }
-#sidebar a { display:block; padding:15px; color:#fff; text-decoration:none; }
+#sidebar a {
+  display:block;
+  padding:15px;
+  color:#fff;
+  text-decoration:none;
+}
 #sidebar a:hover {background:#333;}
 #sidebar.active {left:0;}
+
+/* =========================
+   Menu Toggle
+========================= */
 #menu-toggle {
-  position:fixed;
-  top:10px;
-  left:10px;
+  position: fixed; top:10px; left:10px;
   font-size:24px;
-  background:#0000ff;
-  color:#fff;
-  border:none;
-  padding:5px 10px;
-  cursor:pointer;
+  background:#6200ee; color:#fff;
+  border:none; padding:5px 10px; cursor:pointer;
+  z-index:1100;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width:480px){
+  .container,.login-container,.card {width:90%; padding:15px 20px;}
+  #sidebar {width:200px;}
+  #menu-toggle {font-size:20px; padding:4px 8px;}
 }
