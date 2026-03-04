@@ -3,24 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Earn Point - Tasks</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Tasks | EarnPoint</title>
+<style>
+  body { font-family:'Segoe UI',sans-serif; background:#f0f4ff; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+  .container { background:#fff; padding:30px 40px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.1); width:100%; max-width:600px; }
+  h2 { color:#0000ff; margin-bottom:20px; text-align:center; }
+  ul { list-style:none; padding:0; }
+  li { background:#e8f0fe; margin:10px 0; padding:12px 15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; }
+  button { padding:6px 12px; border:none; border-radius:5px; background:#0000ff; color:#fff; cursor:pointer; transition:0.2s; }
+  button:hover { opacity:0.9; }
+</style>
 </head>
 <body>
-<h1>Tasks</h1>
-
-<div class="task-card">
-  <h3>Watch Video</h3>
-  <p>Earn 100 Points</p>
-  <button onclick="completeTask(100)">Start Task</button>
+<div class="container">
+  <h2>Earning Tasks</h2>
+  <ul id="tasksList"></ul>
 </div>
 
-<div class="task-card">
-  <h3>Visit Sponsor</h3>
-  <p>Earn 50 Points</p>
-  <button onclick="completeTask(50)">Start Task</button>
-</div>
+<script type="module">
+import { auth, db } from './firebase.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<script type="module" src="js/tasks.js"></script>
+const tasks = [
+  {id: "task1", name: "Watch Video", points: 50},
+  {id: "task2", name: "Visit Website", points: 30},
+  {id: "task3", name: "Daily Check-in", points: 20},
+];
+
+let currentUserDoc = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUserDoc = doc(db, "users", user.uid);
+
+  const list = document.getElementById("tasksList");
+  tasks.forEach(task => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      ${task.name} (+${task.points} points)
+      <button>Complete</button>
+    `;
+    list.appendChild(li);
+
+    li.querySelector("button").addEventListener("click", async () => {
+      const docSnap = await getDoc(currentUserDoc);
+      const data = docSnap.data();
+      const newBalance = data.balance + task.points;
+      await updateDoc(currentUserDoc, { balance: newBalance });
+      alert(`${task.points} points added! New Balance: ৳ ${newBalance}`);
+    });
+  });
+});
+</script>
 </body>
 </html>
