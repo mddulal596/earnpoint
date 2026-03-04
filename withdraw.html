@@ -1,20 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Earn Point - Withdraw</title>
-<link rel="stylesheet" href="css/style.css">
+  <title>Withdraw | EarnPoint</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<h1>Withdraw Points</h1>
-<select id="payment-method">
-  <option value="bKash">bKash</option>
-  <option value="Nagad">Nagad</option>
-</select>
-<input type="number" id="points" placeholder="Points to withdraw">
-<button onclick="requestWithdraw(document.getElementById('points').value, document.getElementById('payment-method').value)">Request Withdraw</button>
 
-<script type="module" src="js/withdraw.js"></script>
+<button id="menu-toggle">☰ Menu</button>
+
+<div id="sidebar">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="refer.html">Refer</a>
+  <a href="withdraw.html">Withdraw</a>
+  <a href="profile.html">Profile</a>
+  <a href="#" id="logoutBtn">Logout</a>
+</div>
+
+<div class="container">
+  <h2>Withdraw Request</h2>
+  <input type="text" id="paymentMethod" placeholder="bKash / Nagad">
+  <input type="text" id="number" placeholder="Mobile Number">
+  <input type="number" id="points" placeholder="Points to withdraw">
+  <button id="submitWithdraw">Submit Request</button>
+</div>
+
+<script type="module">
+import { auth, db } from './js/firebase.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const logoutBtn = document.getElementById('logoutBtn');
+logoutBtn.onclick = () => auth.signOut();
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) { window.location.href='login.html'; return; }
+
+  document.getElementById('submitWithdraw').onclick = async () => {
+    const method = document.getElementById('paymentMethod').value;
+    const number = document.getElementById('number').value;
+    const points = Number(document.getElementById('points').value);
+
+    if (!method || !number || !points) { alert('All fields required'); return; }
+
+    await addDoc(collection(db, 'withdrawRequests'), {
+      userId: user.uid,
+      method,
+      number,
+      points,
+      status: 'pending',
+      date: new Date().toISOString()
+    });
+
+    alert('Withdraw request submitted!');
+  }
+});
+</script>
+
 </body>
 </html>
