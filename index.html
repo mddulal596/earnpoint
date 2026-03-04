@@ -1,19 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Earn Point - Login</title>
-<link rel="stylesheet" href="css/style.css">
+  <title>Dashboard | EarnPoint</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="login-container">
-  <h1>Earn Point</h1>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button id="login-btn">Login</button>
-  <p>Don't have an account? <a href="register.html">Register</a></p>
+
+<button id="menu-toggle">☰ Menu</button>
+
+<div id="sidebar">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="tasks.html">Tasks</a>
+  <a href="refer.html">Refer</a>
+  <a href="withdraw.html">Withdraw</a>
+  <a href="profile.html">Profile</a>
+  <a href="#" id="logoutBtn">Logout</a>
 </div>
-<script type="module" src="js/auth.js"></script>
+
+<div class="container">
+  <h2>Dashboard</h2>
+  <p id="userInfo">Loading...</p>
+  <p id="userBalance">Points: 0</p>
+  <button id="addPointsBtn">Add 100 Points</button>
+</div>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('menu-toggle');
+  toggle.onclick = () => sidebar.classList.toggle('active');
+
+  document.getElementById('logoutBtn').onclick = () => alert('Logout clicked (firebase later)');
+  document.getElementById('addPointsBtn').onclick = () => alert('Add points clicked (firebase later)');
+
+  document.getElementById('userInfo').innerText = 'Name: John Doe | Email: john@example.com';
+  document.getElementById('userBalance').innerText = 'Points: 500';
+</script>
+
 </body>
 </html>
