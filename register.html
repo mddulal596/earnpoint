@@ -20,10 +20,10 @@ import { getAuth, createUserWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCocTCNbmDj8b5fOrh5g7W_0YghJ8n9niE",
+  authDomain: "earnpoint-76792.firebaseapp.com",
+  projectId: "earnpoint-76792",
+  appId: "1:88961998597:web:1cf6237d002b5eedb9a16c"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -39,7 +39,7 @@ window.register = function () {
       window.location.href = "dashboard.html";
     })
     .catch((error) => {
-      alert(error.message);
+      alert(error.code + "\n" + error.message);
     });
 };
 
