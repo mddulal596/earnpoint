@@ -11,6 +11,8 @@
 <input type="password" id="password" placeholder="Password"><br><br>
 <button onclick="register()">Sign Up</button>
 
+<p>Already have account? <a href="login.html">Login</a></p>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -18,12 +20,10 @@ import { getAuth, createUserWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCocTCNbmDj8b5fOrh5g7W_0YghJ8n9niE",
-  authDomain: "earnpoint-76792.firebaseapp.com",
-  projectId: "earnpoint-76792",
-  storageBucket: "earnpoint-76792.appspot.com",
-  messagingSenderId: "88961998597",
-  appId: "1:88961998597:web:1cf6237d002b5eedb9a16c"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  appId: "YOUR_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -36,9 +36,10 @@ window.register = function () {
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Registration successful!");
+      window.location.href = "dashboard.html";
     })
     .catch((error) => {
-      alert(error.code + "\n" + error.message);
+      alert(error.message);
     });
 };
 
