@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro Rewards - Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -19,12 +19,12 @@
     </header>
 
     <div id="sidebar" class="sidebar">
-        <a href="#" class="close-btn" onclick="toggleSidebar()">&times;</a>
+        <a href="javascript:void(0)" class="close-btn" onclick="toggleSidebar()">&times;</a>
         <a href="index.html">Home</a>
-        <a href="#">Withdraw</a>
-        <a href="#">History</a>
-        <a href="#">Leaderboard</a>
-        <a href="#">Privacy Policy</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="history.html">History</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="privacy.html">Privacy Policy</a>
     </div>
 
     <main>
@@ -56,7 +56,8 @@
         </div>
     </main>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="js/script.js"></script>
+    
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById("sidebar");
@@ -64,4 +65,4 @@
         }
     </script>
 </body>
-                  </html>
+</html>
