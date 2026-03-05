@@ -1,5 +1,5 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
-body { background-color: #ff0000; color: white; }
+body { background-color: #ff0000; color: white; overflow-x: hidden; }
 
 header {
     background-color: #1e40af;
@@ -14,9 +14,8 @@ header {
 
 .menu-icon { font-size: 24px; cursor: pointer; }
 .app-title { font-weight: bold; font-size: 1.2rem; }
-.balance-container { background: #fff; color: #000; padding: 5px 10px; border-radius: 20px; font-weight: bold; }
+.balance-container { background: #fff; color: #000; padding: 5px 12px; border-radius: 20px; font-weight: bold; }
 
-/* Sidebar */
 .sidebar {
     height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
     background-color: #111; overflow-x: hidden; transition: 0.5s; padding-top: 60px;
@@ -25,25 +24,20 @@ header {
 .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: white; display: block; }
 .sidebar .close-btn { position: absolute; top: 10px; right: 25px; font-size: 36px; }
 
-/* Main UI */
 .bonus-section { text-align: center; margin: 20px 0; }
 .bonus-btn {
-    background: #1e40af; color: white; border: 2px solid white; padding: 15px 30px;
-    border-radius: 10px; font-size: 1.1rem; cursor: pointer; width: 90%;
+    background: #1e40af; color: white; border: 2px solid white; padding: 15px;
+    border-radius: 10px; font-size: 1.1rem; cursor: pointer; width: 90%; font-weight: bold;
 }
-.bonus-btn:disabled { background: #555; cursor: not-allowed; }
+.bonus-btn:disabled { background: #cccccc; color: #666666; cursor: not-allowed; border-color: #999; }
 
-.task-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px;
-}
+.task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
 .task-card {
     background: white; color: #333; padding: 20px; border-radius: 10px;
     text-align: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 .task-card i { font-size: 30px; color: #ff0000; margin-bottom: 10px; }
-.task-card p { font-weight: bold; }
 
-/* Loader */
 #loader {
     position: fixed; width: 100%; height: 100%; background: white;
     display: flex; justify-content: center; align-items: center; z-index: 9999;
