@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Earn Point - Profile</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-<h1>Profile</h1>
-<p>Name: <span id="user-name"></span></p>
-<p>Email: <span id="user-email"></span></p>
-<p>Status: <span id="user-status"></span></p>
+<body style="background: #1e40af; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 20px;">
+    <div style="background: white; color: #333; padding: 40px 20px; border-radius: 20px; text-align: center; width: 100%; max-width: 350px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        <i class="fas fa-user-circle" style="font-size: 90px; color: #ff0000; margin-bottom: 20px;"></i>
+        <h2 style="margin-bottom: 5px;">My Profile</h2>
+        <p id="profileID" style="font-size: 13px; color: #666; word-break: break-all; margin-bottom: 20px;">Loading ID...</p>
+        
+        <div style="background: #f3f3f3; padding: 15px; border-radius: 10px; margin-bottom: 25px;">
+            <p style="font-size: 0.9rem; color: #444;">Status</p>
+            <p style="font-weight: bold; color: green;"><i class="fas fa-check-circle"></i> Active User</p>
+        </div>
 
-<script type="module" src="js/dashboard.js"></script>
+        <button onclick="window.location.href='index.html'" style="background: #ff0000; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; width: 100%;">Back to Home</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCocTCNbmDj8b5fOrh5g7W_0YghJ8n9niE",
+            authDomain: "earnpoint-76792.firebaseapp.com",
+            projectId: "earnpoint-76792",
+            appId: "1:88961998597:web:1cf6237d002b5eedb9a16c"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        onAuthStateChanged(auth, (user) => {
+            if (user) document.getElementById('profileID').innerText = "ID: " + user.uid;
+        });
+    </script>
 </body>
 </html>
