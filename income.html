@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Processing</title>
     <style>
-        body { background: #ff0000; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .timer-box { font-size: 3rem; font-weight: bold; background: #1e40af; padding: 20px; border-radius: 50%; border: 5px solid white; }
-        h2 { margin-top: 20px; }
+        body { background: #ff0000; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: Arial; }
+        .timer-box { font-size: 3rem; font-weight: bold; background: #1e40af; padding: 30px; border-radius: 50%; border: 5px solid white; margin: 20px; }
     </style>
 </head>
 <body>
     <h2>Please Wait...</h2>
     <div class="timer-box" id="timer">19</div>
-    <p>Loading Ad and Validating Reward</p>
+    <p>Watching Ad... Do not close!</p>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Same Config
         const firebaseConfig = {
             apiKey: "AIzaSyCocTCNbmDj8b5fOrh5g7W_0YghJ8n9niE",
             authDomain: "earnpoint-76792.firebaseapp.com",
@@ -35,29 +33,24 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        let count = 19;
-        const timerDisplay = document.getElementById('timer');
+        let time = 19;
+        const timerLabel = document.getElementById('timer');
 
-        const countdown = setInterval(() => {
-            count--;
-            timerDisplay.innerText = count;
-            if (count <= 0) {
-                clearInterval(countdown);
-                completeTask();
+        const interval = setInterval(() => {
+            time--;
+            timerLabel.innerText = time;
+            if (time <= 0) {
+                clearInterval(interval);
+                const user = auth.currentUser;
+                if (user) {
+                    const userRef = ref(db, 'users/' + user.uid);
+                    get(userRef).then(snap => {
+                        update(userRef, { balance: snap.val().balance + 0.50 })
+                        .then(() => window.location.href = "index.html");
+                    });
+                }
             }
         }, 1000);
-
-        function completeTask() {
-            const user = auth.currentUser;
-            if (user) {
-                const userRef = ref(db, 'users/' + user.uid);
-                get(userRef).then(snapshot => {
-                    const data = snapshot.val();
-                    update(userRef, { balance: data.balance + 0.50 })
-                    .then(() => window.location.href = "index.html");
-                });
-            }
-        }
     </script>
 </body>
 </html>
