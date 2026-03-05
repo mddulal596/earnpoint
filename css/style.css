@@ -1,117 +1,55 @@
-/* =========================
-   Global Dark Theme
-========================= */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #121212;
-  color: #eee;
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
+body { background-color: #ff0000; color: white; }
+
+header {
+    background-color: #1e40af;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-h1,h2,h3,p {
-  margin: 10px 0;
-  color: #eee;
-  text-align: center;
-}
+.menu-icon { font-size: 24px; cursor: pointer; }
+.app-title { font-weight: bold; font-size: 1.2rem; }
+.balance-container { background: #fff; color: #000; padding: 5px 10px; border-radius: 20px; font-weight: bold; }
 
-/* =========================
-   Container / Card
-========================= */
-.container, .login-container, .card {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px 30px;
-  background: #1e1e1e;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-  text-align: center;
+/* Sidebar */
+.sidebar {
+    height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
+    background-color: #111; overflow-x: hidden; transition: 0.5s; padding-top: 60px;
 }
+.sidebar.active { width: 250px; }
+.sidebar a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: white; display: block; }
+.sidebar .close-btn { position: absolute; top: 10px; right: 25px; font-size: 36px; }
 
-/* =========================
-   Buttons
-========================= */
-button {
-  padding: 10px 20px;
-  background: #6200ee;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 15px;
-  margin: 5px;
-  transition: 0.2s;
+/* Main UI */
+.bonus-section { text-align: center; margin: 20px 0; }
+.bonus-btn {
+    background: #1e40af; color: white; border: 2px solid white; padding: 15px 30px;
+    border-radius: 10px; font-size: 1.1rem; cursor: pointer; width: 90%;
 }
-button:hover {opacity:0.8;}
-#logoutBtn {background:#bb0000;}
-#addPointsBtn {background:#6200ee;}
+.bonus-btn:disabled { background: #555; cursor: not-allowed; }
 
-/* =========================
-   Inputs
-========================= */
-input[type="text"], input[type="email"], input[type="password"] {
-  width: 100%;
-  padding: 12px 15px;
-  margin: 10px 0;
-  border: 1px solid #444;
-  border-radius: 8px;
-  font-size: 15px;
-  background: #1e1e1e;
-  color: #eee;
+.task-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px;
 }
-
-/* =========================
-   Task Cards
-========================= */
 .task-card {
-  background: #1e1e1e;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    background: white; color: #333; padding: 20px; border-radius: 10px;
+    text-align: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
+.task-card i { font-size: 30px; color: #ff0000; margin-bottom: 10px; }
+.task-card p { font-weight: bold; }
 
-/* =========================
-   Sidebar
-========================= */
-#sidebar {
-  position: fixed;
-  left: -250px; top:0;
-  width: 250px; height: 100%;
-  background: #111;
-  color: #fff;
-  transition: 0.3s;
-  padding-top: 50px;
-  z-index: 1000;
+/* Loader */
+#loader {
+    position: fixed; width: 100%; height: 100%; background: white;
+    display: flex; justify-content: center; align-items: center; z-index: 9999;
 }
-#sidebar a {
-  display:block;
-  padding:15px;
-  color:#fff;
-  text-decoration:none;
+.spinner {
+    width: 50px; height: 50px; border: 5px solid #f3f3f3;
+    border-top: 5px solid #1e40af; border-radius: 50%; animation: spin 1s linear infinite;
 }
-#sidebar a:hover {background:#333;}
-#sidebar.active {left:0;}
-
-/* =========================
-   Menu Toggle
-========================= */
-#menu-toggle {
-  position: fixed; top:10px; left:10px;
-  font-size:24px;
-  background:#6200ee; color:#fff;
-  border:none; padding:5px 10px; cursor:pointer;
-  z-index:1100;
-}
-
-/* =========================
-   Responsive
-========================= */
-@media (max-width:480px){
-  .container,.login-container,.card {width:90%; padding:15px 20px;}
-  #sidebar {width:200px;}
-  #menu-toggle {font-size:20px; padding:4px 8px;}
-}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
