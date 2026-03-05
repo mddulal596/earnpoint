@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Processing</title>
+    <style>
+        body { background: #ff0000; color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .timer-box { font-size: 3rem; font-weight: bold; background: #1e40af; padding: 20px; border-radius: 50%; border: 5px solid white; }
+        h2 { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Please Wait...</h2>
+    <div class="timer-box" id="timer">19</div>
+    <p>Loading Ad and Validating Reward</p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Same Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCocTCNbmDj8b5fOrh5g7W_0YghJ8n9niE",
+            authDomain: "earnpoint-76792.firebaseapp.com",
+            databaseURL: "https://earnpoint-76792-default-rtdb.firebaseio.com",
+            projectId: "earnpoint-76792",
+            storageBucket: "earnpoint-76792.firebasestorage.app",
+            messagingSenderId: "88961998597",
+            appId: "1:88961998597:web:1cf6237d002b5eedb9a16c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        let count = 19;
+        const timerDisplay = document.getElementById('timer');
+
+        const countdown = setInterval(() => {
+            count--;
+            timerDisplay.innerText = count;
+            if (count <= 0) {
+                clearInterval(countdown);
+                completeTask();
+            }
+        }, 1000);
+
+        function completeTask() {
+            const user = auth.currentUser;
+            if (user) {
+                const userRef = ref(db, 'users/' + user.uid);
+                get(userRef).then(snapshot => {
+                    const data = snapshot.val();
+                    update(userRef, { balance: data.balance + 0.50 })
+                    .then(() => window.location.href = "index.html");
+                });
+            }
+        }
+    </script>
+</body>
+</html>
