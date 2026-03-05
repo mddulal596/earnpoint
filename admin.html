@@ -1,50 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Panel | EarnPoint</title>
+  <title>Admin Panel</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <div class="container">
   <h2>Admin Panel</h2>
-  <div id="pendingWithdraws"></div>
+  <div id="adminContent">Loading...</div>
 </div>
 
 <script type="module">
 import { auth, db } from './js/firebase.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user || user.email !== 'mddulalhosen0@gmail.com') { alert('Admin only'); window.location.href='login.html'; return; }
+const adminEmail = "mddulalhosen0@gmail.com";
 
-  const withdrawsCol = collection(db, 'withdrawRequests');
-  const withdrawsSnap = await getDocs(withdrawsCol);
-
-  const container = document.getElementById('pendingWithdraws');
-  withdrawsSnap.forEach(w => {
-    const data = w.data();
-    const div = document.createElement('div');
-    div.classList.add('task-card');
-    div.innerHTML = `
-      <span>${data.userId} | ${data.points} Points | ${data.method} | ${data.number} | Status: ${data.status}</span>
-      <button id="approve-${w.id}">Approve</button>
-      <button id="reject-${w.id}">Reject</button>
-    `;
-    container.appendChild(div);
-
-    document.getElementById(`approve-${w.id}`).onclick = async () => {
-      await updateDoc(doc(db, 'withdrawRequests', w.id), { status: 'paid' });
-      alert('Withdraw approved');
-      div.remove();
-    }
-    document.getElementById(`reject-${w.id}`).onclick = async () => {
-      await updateDoc(doc(db, 'withdrawRequests', w.id), { status: 'rejected' });
-      alert('Withdraw rejected');
-      div.remove();
-    }
+onAuthStateChanged(auth, async user=>{
+  if(!user) return window.location.href="index.html";
+  if(user.email !== adminEmail) return alert("Not authorized");
+  const usersSnap = await getDocs(collection(db,"users"));
+  let html = "<h3>Users List</h3>";
+  usersSnap.forEach(u=>{
+    const data = u.data();
+    html += `<p>${data.email} - Points: ${data.points || 0}</p>`;
   });
+  document.getElementById("adminContent").innerHTML = html;
 });
 </script>
 
