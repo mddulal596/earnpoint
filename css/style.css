@@ -1,37 +1,67 @@
-/* আপনার আগের CSS এর সাথে এই অংশগুলো যোগ বা আপডেট করুন */
-.header-right { display: flex; align-items: center; gap: 12px; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial', sans-serif; }
+body { background-color: #ff0000; color: white; overflow-x: hidden; }
 
-.profile-icon {
+/* Header Design */
+header {
+    background-color: #1e40af;
+    padding: 12px 15px;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
-    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
-.profile-icon i { font-size: 24px; }
-.profile-icon span { font-size: 10px; margin-top: 2px; font-weight: bold; }
+.header-left, .header-right { display: flex; align-items: center; gap: 12px; }
+.menu-icon { font-size: 26px; cursor: pointer; }
+.app-title { font-weight: bold; font-size: 1.2rem; }
 
-.balance-container {
-    background: white;
-    color: #1e40af;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+.balance-container { 
+    background: white; color: #1e40af; 
+    padding: 6px 15px; border-radius: 20px; 
+    font-weight: bold; font-size: 14px; 
 }
 
-/* লোডার ডিজাইন */
+.profile-box { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+.profile-box i { font-size: 24px; }
+.profile-box span { font-size: 10px; margin-top: 2px; font-weight: bold; }
+
+/* Sidebar */
+.sidebar {
+    height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
+    background-color: #111; overflow-x: hidden; transition: 0.4s; padding-top: 60px;
+}
+.sidebar.active { width: 260px; }
+.sidebar a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #ddd; display: block; border-bottom: 1px solid #222; }
+.sidebar a i { margin-right: 12px; color: #1e40af; }
+.sidebar .close-btn { position: absolute; top: 10px; right: 25px; font-size: 36px; }
+
+/* Main Section */
+.bonus-section { text-align: center; margin: 25px 0; }
+.bonus-btn {
+    background: #1e40af; color: white; border: 2px solid white; padding: 15px;
+    border-radius: 12px; font-size: 1.1rem; cursor: pointer; width: 90%; font-weight: bold;
+}
+.bonus-btn:disabled { background: #666; border-color: #888; cursor: not-allowed; }
+
+.task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.task-card {
+    background: white; color: #333; padding: 25px 15px; border-radius: 15px;
+    text-align: center; cursor: pointer; transition: 0.3s;
+}
+.task-card:active { transform: scale(0.95); }
+.task-card i { font-size: 40px; color: #ff0000; margin-bottom: 10px; }
+.task-card p { font-weight: bold; font-size: 16px; }
+.task-card span { color: #666; font-size: 14px; }
+
+/* Loader */
 #loader {
-    position: fixed; width: 100%; height: 100%;
-    background: white; z-index: 9999;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
+    position: fixed; width: 100%; height: 100%; background: white;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
 }
 .spinner {
-    width: 40px; height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #1e40af;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    width: 50px; height: 50px; border: 6px solid #f3f3f3;
+    border-top: 6px solid #1e40af; border-radius: 50%; animation: spin 1s linear infinite;
 }
 @keyframes spin { 100% { transform: rotate(360deg); } }
