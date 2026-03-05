@@ -20,45 +20,48 @@ const adLink = "https://middayopened.com/rmm8pbwe?key=a42d11bce0966c10bc9b3f909a
 // লগইন স্ট্যাটাস চেক
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        setupUser(user);
+        handleUserSession(user);
     } else {
-        signInAnonymously(auth).catch(() => {
+        signInAnonymously(auth).catch(err => {
+            console.error("Auth Error:", err);
             document.getElementById('loader').style.display = 'none';
         });
     }
 });
 
-function setupUser(user) {
+function handleUserSession(user) {
     const userRef = ref(db, 'users/' + user.uid);
-    const shortID = user.uid.substring(0, 5); // ID-র প্রথম ৫ অক্ষর নামের মতো দেখাবে
-    document.getElementById('headerUserName').innerText = "ID: " + shortID;
+    const shortName = "User_" + user.uid.substring(user.uid.length - 4);
+    document.getElementById('userNameHeader').innerText = shortName;
 
-    // ৫ সেকেন্ডের ব্যাকআপ টাইমআউট (যদি নেট স্লো থাকে)
-    const backupTimeout = setTimeout(() => {
+    // নেট স্লো থাকলে ৫ সেকেন্ড পর অটো লোডার বন্ধ হবে
+    const forceHideLoader = setTimeout(() => {
         document.getElementById('loader').style.display = 'none';
     }, 5000);
 
     onValue(userRef, (snapshot) => {
-        clearTimeout(backupTimeout);
+        clearTimeout(forceHideLoader);
         const data = snapshot.val();
         if (data) {
             document.getElementById('userBalance').innerText = data.balance.toFixed(2);
-            updateBonusTimer(data.lastBonusTime || 0);
+            startBonusTimer(data.lastBonusTime || 0);
         } else {
-            // নতুন ইউজার হলে ডেটা তৈরি
-            set(userRef, { balance: 0.00, lastBonusTime: 0, uid: user.uid });
+            // নতুন ইউজার হলে ডেটাবেসে এন্ট্রি তৈরি
+            set(userRef, { balance: 0.00, lastBonusTime: 0, name: shortName });
         }
         document.getElementById('loader').style.display = 'none';
     });
 }
 
-function updateBonusTimer(lastTime) {
+function startBonusTimer(lastTime) {
     const btn = document.getElementById('bonusBtn');
-    const cooldown = 15 * 60 * 1000;
+    const cooldown = 15 * 60 * 1000; // ১৫ মিনিট
+
     const tick = () => {
-        const remaining = cooldown - (Date.now() - lastTime);
-        if (remaining > 0) {
+        const diff = Date.now() - lastTime;
+        if (diff < cooldown) {
             btn.disabled = true;
+            const remaining = cooldown - diff;
             const m = Math.floor(remaining / 60000);
             const s = Math.floor((remaining % 60000) / 1000);
             btn.innerText = `Wait ${m}:${s < 10 ? '0' : ''}${s}s`;
@@ -71,16 +74,22 @@ function updateBonusTimer(lastTime) {
     tick();
 }
 
-// বাটন ক্লিক ফাংশন
+// বোনাস বাটন ক্লিক
 document.getElementById('bonusBtn').onclick = () => {
     window.open(adLink, '_blank');
     const userRef = ref(db, 'users/' + auth.currentUser.uid);
     get(userRef).then(snap => {
-        update(userRef, { balance: snap.val().balance + 5.00, lastBonusTime: Date.now() });
+        const currentBalance = snap.val().balance || 0;
+        update(userRef, { 
+            balance: currentBalance + 5.00, 
+            lastBonusTime: Date.now() 
+        });
+        alert("Success! 5.00 Tk added.");
     });
 };
 
-window.startTask = () => {
+// টাস্ক ক্লিক
+window.startTask = function(taskName) {
     window.open(adLink, '_blank');
     window.location.href = "income.html";
 };
