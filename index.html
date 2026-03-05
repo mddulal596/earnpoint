@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro Rewards - Home</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div id="loader">
@@ -13,18 +13,26 @@
     </div>
 
     <header>
-        <div class="menu-icon" onclick="toggleSidebar()">☰</div>
-        <div class="app-title">PRO REWARDS</div>
-        <div class="balance-container">Tk. <span id="userBalance">0.00</span></div>
+        <div class="header-left">
+            <div class="menu-icon" onclick="toggleSidebar()">☰</div>
+            <div class="app-title">PRO REWARDS</div>
+        </div>
+        <div class="header-right">
+            <div class="balance-container">Tk. <span id="userBalance">0.00</span></div>
+            <div class="profile-box" onclick="window.location.href='profile.html'">
+                <i class="fas fa-user-circle"></i>
+                <span id="userName">User</span>
+            </div>
+        </div>
     </header>
 
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="close-btn" onclick="toggleSidebar()">&times;</a>
-        <a href="index.html">Home</a>
-        <a href="withdraw.html">Withdraw</a>
-        <a href="history.html">History</a>
-        <a href="leaderboard.html">Leaderboard</a>
-        <a href="privacy.html">Privacy Policy</a>
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="withdraw.html"><i class="fas fa-wallet"></i> Withdraw</a>
+        <a href="history.html"><i class="fas fa-history"></i> History</a>
+        <a href="leaderboard.html"><i class="fas fa-trophy"></i> Leaderboard</a>
+        <a href="privacy.html"><i class="fas fa-lock"></i> Privacy Policy</a>
     </div>
 
     <main>
@@ -59,8 +67,7 @@
     <script type="module" src="js/script.js"></script>
     <script>
         function toggleSidebar() {
-            const sidebar = document.getElementById("sidebar");
-            sidebar.classList.toggle("active");
+            document.getElementById("sidebar").classList.toggle("active");
         }
     </script>
 </body>
