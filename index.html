@@ -10,7 +10,7 @@
 <body>
     <div id="loader">
         <div class="spinner"></div>
-        <p style="margin-top: 10px; color: #1e40af;">Connecting to Server...</p>
+        <p style="margin-top: 10px; color: #1e40af; font-weight: bold;">Loading Data...</p>
     </div>
 
     <header>
@@ -20,9 +20,9 @@
         </div>
         <div class="header-right">
             <div class="balance-container">Tk. <span id="userBalance">0.00</span></div>
-            <div class="profile-icon" onclick="window.location.href='profile.html'">
+            <div class="profile-box" onclick="window.location.href='profile.html'">
                 <i class="fas fa-user-circle"></i>
-                <span id="headerUserName">User</span>
+                <span id="userNameHeader">User</span>
             </div>
         </div>
     </header>
@@ -42,22 +42,22 @@
         </div>
 
         <div class="task-grid">
-            <div class="task-card" onclick="startTask()">
+            <div class="task-card" onclick="startTask('Task 01')">
                 <i class="fas fa-play-circle"></i>
                 <p>Task 01</p>
                 <span>Tk. 0.50</span>
             </div>
-            <div class="task-card" onclick="startTask()">
+            <div class="task-card" onclick="startTask('Task 02')">
                 <i class="fas fa-play-circle"></i>
                 <p>Task 02</p>
                 <span>Tk. 0.50</span>
             </div>
-            <div class="task-card" onclick="startTask()">
+            <div class="task-card" onclick="startTask('Task 03')">
                 <i class="fas fa-play-circle"></i>
                 <p>Task 03</p>
                 <span>Tk. 0.50</span>
             </div>
-            <div class="task-card" onclick="startTask()">
+            <div class="task-card" onclick="startTask('Task 04')">
                 <i class="fas fa-play-circle"></i>
                 <p>Task 04</p>
                 <span>Tk. 0.50</span>
@@ -68,8 +68,7 @@
     <script type="module" src="js/script.js"></script>
     <script>
         function toggleSidebar() {
-            const sb = document.getElementById("sidebar");
-            sb.classList.toggle("active");
+            document.getElementById("sidebar").classList.toggle("active");
         }
     </script>
 </body>
